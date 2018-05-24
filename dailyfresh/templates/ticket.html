@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>火车票查询</title>
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(
+            function(){
+                $station = $(".station");
+                $station.on("blur",function(){
+                    re = /[\u4e00-\u9fa5]+/
+                    if(re.test($(this).val())==false&&$(this).val() != ''){
+                        alert("请输入中文站名!")
+                    }
+                })
+                $('#form1').submit(function(){
+                    return false
+                })
+                $("#submit").on("click",function(){
+                    if($station.val() == ''){
+                        return
+                    }
+                $('#display1').load("/ticket",{"from_station":$('#from_station').val(),
+                "to_station":$('#to_station').val(),"date":$('#date').val(),"submit":"查询"})
+                })
+            }
+        )
+
+    </script>
+</head>
+<body>
+    <h3>请输入您要查询的数据</h3>
+    <hr>
+    <form id="form1" name="form1" method="post" action="" >
+    <table align="center">
+    <tr><td align="right">起始站：</td><td><input type="text" class="station" id="from_station" name="from_station" required="required" autofocus="autofocus"/></td></tr>
+    <tr><td align="right">终点站：</td><td><input type="text" class="station" id="to_station" name="to_station" required="required"/></td></tr>
+    <tr><td align="right">出发日期：</td><td><input type="date" id="date"name="date" required="required"/></td></tr>
+    </table>
+    <div align="center"><input type="submit" id="submit"name="submit" value="查询"/><input name="reset" type="reset" id="reset" value="清空" /></div>
+    </form>
+    <hr>
+    <div id="display1">
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>斗图</title>
+    <link rel="stylesheet" href="./static/css/picture.css">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(
+            function(){
+                $("#more").on("click",function(){
+                    $.get("pictureajax.html",function(data,status){
+                        $("#picture1").append(data)
+                    })})})
+    </script>
+</head>
+<body>
+<div id="picture1">
+{%for picture_url in pictures%}
+    <img src="{{ picture_url }}" alt="">
+{% endfor %}
+</div>
+<div id="more">
+    加载更多
+</div>
+</body>
+</html>

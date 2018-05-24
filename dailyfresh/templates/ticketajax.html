@@ -1,0 +1,6 @@
+<table id ="display"border="1" width="80%%" align="center">
+<tr><th>车次</th><th>出发日期</th><th>始发站</th><th>终点站</th><th>发车时间</th><th>到站时间</th><th>历时</th><th>余票信息</th></tr>
+{% for train_name,train_info in tickets.items()  %}
+<tr><td>{{ train_name }}</td><td>{{ date }}</td><td>{{ from_station }}</td><td>{{ to_station }}</td><td>{{ train_info[0] }}</td><td>{{ train_info[1] }}</td><td>{{ train_info[2] }}</td><td>{{ train_info[3] }}</td></tr>
+{% endfor %}
+</table>

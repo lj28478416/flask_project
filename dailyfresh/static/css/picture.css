@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#more{
+    border: 1px solid black;
+    width: 100px;
+    margin: 50px auto;
+    border-radius: 10px;
+    height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    overflow: hidden;
+}
+#more:hover{
+    background: aqua;
+}
+img{
+    width: 200px;
+    height: 200px;
+}
