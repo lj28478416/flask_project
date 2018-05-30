@@ -34,19 +34,22 @@ $(function(){
 
 	// 点击输入框，提示文字上移
 	$('.form_group').on('click focusin',function(){
-		$(this).children('.input_tip').animate({'top':-5,'font-size':12},'fast').siblings('input').focus().parent().addClass('hotline');
-	})
-
-	// 输入框失去焦点，如果输入框为空，则提示文字下移
-	$('.form_group input').on('blur focusout',function(){
-		$(this).parent().removeClass('hotline');
-		var val = $(this).val();
-		if(val=='')
-		{
-			$(this).siblings('.input_tip').animate({'top':22,'font-size':14},'fast');
-		}
-	})
-
+        (()=>{
+            $(this).siblings().removeClass('hotline');
+            for(var i = 0 ; i < $(this).siblings().length;i++){
+            var val = $(this).siblings('.form_group').eq(i).children('input').val();
+            if(val=='')
+            {
+                $(this).siblings('.form_group').eq(i).children('.input_tip').animate({'top':22,'font-size':14},'fast');
+            }}
+        })()
+        $(this).children('.input_tip').animate({'top':-5,'font-size':12},'fast').siblings('input').focus()
+    })
+    $('.form_group input').focus(
+        function(){
+            $(this).parent().addClass('hotline')
+            return false
+        })
 
 	// 打开注册框
 	$('.register_btn').click(function(){
@@ -94,22 +97,39 @@ $(function(){
     // TODO 登录表单提交
     $(".login_form_con").submit(function (e) {
         e.preventDefault()
-        var mobile = $(".login_form #mobile").val()
-        var password = $(".login_form #password").val()
-
+        var mobile = $("#mobile").val()
+        var password = $("#password").val()
+        var csrf_token = $('#csrf_token').val()
         if (!mobile) {
             $("#login-mobile-err").show();
+            e.preventDefault()
             return;
         }
 
         if (!password) {
             $("#login-password-err").show();
+            e.preventDefault()
             return;
         }
 
         // 发起登录请求
-    })
+        $.post('/news/login',
+        {
+            'csrf_token': csrf_token,
+            'mobile':mobile,
+            'password':password
 
+        },data=>{
+            if(data.state=='failure'){
+                alert('error')
+            }
+            else if (data.state=='success'){
+            $(this).hide()
+            $('#user_btnsfr').hide()
+            $('#nick_name').text(data.nick_name)
+            $('#user_loginfr').show()}
+        })
+    })
 
     // TODO 注册按钮点击
     $(".register_form_con").submit(function (e) {
@@ -120,6 +140,7 @@ $(function(){
         var mobile = $("#register_mobile").val()
         var smscode = $("#smscode").val()
         var password = $("#register_password").val()
+        var imageCode = $("#imagecode").val();
 
 		if (!mobile) {
             $("#register-mobile-err").show();
@@ -142,6 +163,32 @@ $(function(){
         }
 
         // 发起注册请求
+        // 因为页面是用了框架,框架是一种跨域请求方式,所以jquery自动将post请求变成了get
+        $.post(
+            '/news/register',
+            {
+                'sms_code':smscode,
+                'mobile':mobile,
+                'pwd':password,
+                'pic_code':imageCode,
+                'csrf_token': $('#csrf_token').val()
+            },
+            function(data){
+                if(data.result == 1){
+                    console.log('有空数据')
+                }else if(data.result == 2){
+                    console.log('手机号已存在')
+                }else if(data.result == 3){
+                    console.log('验证码错误')
+                }else if(data.result == 4){
+                    console.log('手机验证码错误')
+                }else if(data.result == 5){
+                    console.log('密码不符合规则')
+                }else if(data.result == 6){
+                    $(window).attr('location','/news/user');
+                }
+            }
+        )
 
     })
 })
@@ -150,7 +197,7 @@ var imageCodeId = ""
 
 // TODO 生成一个图片验证码的编号，并设置页面中图片验证码img标签的src属性
 function generateImageCode() {
-
+    $('.get_pic_code').attr('src',$('.get_pic_code').attr('src') + 1)
 }
 
 // 发送短信验证码
@@ -171,8 +218,26 @@ function sendSMSCode() {
         $(".get_code").attr("onclick", "sendSMSCode();");
         return;
     }
-
     // TODO 发送短信验证码
+    $.post(
+        '/news/sms_verify',
+        {   
+            "csrf_token":$('#csrf_token').val(),
+            "mobile":mobile,
+            "pic_code":imageCode
+        },
+        function(data){
+            console.log(data.result)
+            if(data.result==3){
+                console.log('手机号有误')
+            }else if(data.result==1){
+                console.log('图片验证码错误')
+            }else if(data.result==2){
+                console.log(data.code)
+            }
+            $(".get_code").attr("onclick", "sendSMSCode();");
+        }
+    )
 }
 
 // 调用该函数模拟点击左侧按钮

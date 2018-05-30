@@ -15,6 +15,7 @@ $(function () {
 
         if (clickCid != currentCid) {
             // TODO 去加载新闻数据
+            //可以用load
 
         }
     })

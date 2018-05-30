@@ -20,7 +20,7 @@ $(function(){
 
         // 评论提交
     $(".comment_form").submit(function (e) {
-        e.preventDefault();
+        // e.preventDefault();
 
     })
 
