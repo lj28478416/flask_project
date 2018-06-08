@@ -13,14 +13,70 @@
 	<div class="header_con">
 		<div class="header">
 			<a href="/" class="logo fl"><img src="images/logo.png" alt="logo"></a>
-			{% include 'news/logined.html'%}
+			{% if logined == 'true' %}
+<div class="user_login fr" id ='user_loginfr' style="display: block;">
+    <img class = 'user_pic' src="{{avatar_get}}" class="lgin_pic">
+    <a href="/news/user" id = 'nick_name'>{{ nick_name }}</a>
+    <a href="javascript:;" id = 'logout'>退出</a>
+    <script>
+        $('#logout').click(
+            function(){
+                $.get(
+                    'logout',
+                {
+                    'logout':'true'
+                },
+                function(){
+                    $('#user_loginfr').hide()
+                    $('#user_btnsfr').show()
+                    $('.comment_form_logout').show()
+                    $('.comment_form').hide()
+					location.href='index'
+                }
+                )
+            }
+        )
+    </script>
+</div>
+<div class="user_btns fr" id="user_btnsfr" style="display: none;">
+    <a href="javascript:;" class="login_btn">登录</a>/<a href="javascript:;" class="register_btn">注册</a>
+</div>
+{% else %}
+<div class="user_login fr" id ='user_loginfr' style="display: none;">
+    <img class = 'user_pic' src="{{avatar_get}}" class="lgin_pic">
+    <a href="/news/user" id ='nick_name'>{{ nick_name }}</a>
+    <a href="javascript:;" id ='logout'>退出</a>
+    <script>
+            $('#logout').click(
+                function(){
+                    $.get(
+                        'logout',
+                    {
+                        'logout':'true'
+                    },
+                    function(data){
+                        $('#user_loginfr').hide()
+                        $('#user_btnsfr').show()
+                        $('.comment_form_logout').show()
+                        $('.comment_form').hide()
+						location.href='index'
+                    }
+                    )
+                }
+            )
+        </script>
+</div>
+<div class="user_btns fr" id="user_btnsfr" style="display: block;">
+    <a href="javascript:;" class="login_btn">登录</a>/<a href="javascript:;" class="register_btn">注册</a>
+</div>
+{% endif %}
 		</div>
 	</div>
 	
 	<div class="conter_con">
 		<div class="user_menu_con fl">
 			<div class="user_center_pic">
-				<img src="images/user_pic.png" alt="用户图片">
+				<img class ='user_pic' src="{{avatar_get}}" alt="用户图片">
 			</div>
 			<div class="user_center_name">{{nick_name}}</div>
 

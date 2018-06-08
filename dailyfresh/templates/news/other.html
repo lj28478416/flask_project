@@ -22,18 +22,28 @@
     <div class="conter_con">
         <div class="user_menu_con fl">
             <div class="user_center_pic">
-                <img src="images/user_pic.png" alt="用户图片">
+                <input type="hidden" class="author_card" author='{{ userinfo.id }}'>
+                <img src="{{userinfo.avatar_get}}" alt="用户图片">
             </div>
-            <div class="user_center_name">用户李思</div>
+            <div class="user_center_name">{{userinfo.nick_name}}</div>
 
             <ul class="other_detail">
+                {%if userinfo.gender == False%}
                 <li>性 别：女</li>
-                <li>签 名：这个人很懒，什么都没留下</li>
+                {%else%}
+                <li>性 别：男</li>
+                {%endif%}
+                <li>签 名：{{userinfo.signature}}</li>
             </ul>
             
-            <div class="focus_other">
-                <a href="javascript:;" class="focus">关注</a><br>
-        <a href="javascript:;" class="focused"><span class="out">已关注</span><span class="over">取消关注</span></a>
+            <div class="focus_other"> 
+                {%if follow ==1 %}
+                <a href="javascript:;" class="focus" style="display: none">关注</a><br>
+                <a href="javascript:;" class="focused" style="display: block"><span class="out">已关注</span><span class="over">取消关注</span></a>
+                {%elif follow==2%}
+                <a href="javascript:;" class="focus" style="display: block">关注</a><br>
+                <a href="javascript:;" class="focused" style="display: none"><span class="out">已关注</span><span class="over">取消关注</span></a>
+                {%endif%}
             </div>            
         </div>
 
@@ -41,22 +51,19 @@
             <div class="other_collect">
                 <h3>他的文章</h3>
                 <ul class="article_list">
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-                    <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+                    {%for new in news%}
+                    <li><a href="/news/detail?new_id={{new.id}}">{{new.name}}</a><span>{{new.publish_time}}</span></li>
+                    {%endfor%}
                 </ul>
                 
                 <div id="pagination" class="page"></div>
                 <script>
                     $(function(){
                         $("#pagination").pagination({
-                            currentPage: 2,
-                            totalPage: 3,
+                            currentPage: {{page}},
+                            totalPage: {{total_page}},
                             callback: function(current) {
-                                alert('ok!');
+                                location.href='?id={{user_id}}&page=' + current
                             }
                         });
                     });

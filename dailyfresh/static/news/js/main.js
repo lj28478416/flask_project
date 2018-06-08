@@ -127,7 +127,12 @@ $(function(){
             $(this).hide()
             $('#user_btnsfr').hide()
             $('#nick_name').text(data.nick_name)
-            $('#user_loginfr').show()}
+            $('.user_pic').attr('src',data.avatar_get)
+            $('#user_loginfr').show()
+            $('.comment_form_logout').hide()
+            $('.comment_form').show()
+            $('.comment_form img').attr('src',data.avatar_get)
+        }
         })
     })
 

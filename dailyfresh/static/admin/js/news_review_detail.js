@@ -4,8 +4,8 @@ function getCookie(name) {
 }
 
 $(function(){
-    $(".news_review").submit(function (e) {
-        e.preventDefault()
+    // $(".news_review").submit(function (e) {
+    //     e.preventDefault()
 
     })
 })

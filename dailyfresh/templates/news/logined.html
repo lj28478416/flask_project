@@ -1,17 +1,61 @@
 {% if logined == 'true' %}
 <div class="user_login fr" id ='user_loginfr' style="display: block;">
-    <img src="images/person01.png" class="lgin_pic">
+    <img class = 'user_pic' src="{{avatar_get}}" class="lgin_pic">
     <a href="/news/user" id = 'nick_name'>{{ nick_name }}</a>
-    <a href="?logout=true" id = 'logout'>退出</a>
+    <a href="javascript:;" id = 'logout'>退出</a>
+    <script>
+        $('#logout').click(
+            function(){
+                $.get(
+                    'logout',
+                {
+                    'logout':'true'
+                },
+                function(){
+                    $('#user_loginfr').hide()
+                    $('#user_btnsfr').show()
+                    $('.comment_form_logout').show()
+                    $('.comment_form').hide()
+                    $('#collection1').show()
+                    $('#collection2').hide()
+                    $('.collected').hide()
+                    $('.has_comment_up').addClass('comment_up').removeClass('has_comment_up')
+                    $('.focus').show()
+                    $('.focused').hide()
+                }
+                )
+            }
+        )
+    </script>
 </div>
 <div class="user_btns fr" id="user_btnsfr" style="display: none;">
     <a href="javascript:;" class="login_btn">登录</a>/<a href="javascript:;" class="register_btn">注册</a>
 </div>
 {% else %}
 <div class="user_login fr" id ='user_loginfr' style="display: none;">
-    <img src="images/person01.png" class="lgin_pic">
+    <img class = 'user_pic' src="{{avatar_get}}" class="lgin_pic">
     <a href="/news/user" id ='nick_name'>{{ nick_name }}</a>
-    <a href="?logout=true" id ='logout'>退出</a>
+    <a href="javascript:;" id ='logout'>退出</a>
+    <script>
+            $('#logout').click(
+                function(){
+                    $.get(
+                        'logout',
+                    {
+                        'logout':'true'
+                    },
+                    function(data){
+                        $('#user_loginfr').hide()
+                        $('#user_btnsfr').show()
+                        $('.comment_form_logout').show()
+                        $('.comment_form').hide()
+                        $('.collection').addClass('login_btn').show()
+                        $('.collected').hide()
+                    }
+                    )
+                }
+            )
+        </script>
 </div>
 <div class="user_btns fr" id="user_btnsfr" style="display: block;">
     <a href="javascript:;" class="login_btn">登录</a>/<a href="javascript:;" class="register_btn">注册</a>

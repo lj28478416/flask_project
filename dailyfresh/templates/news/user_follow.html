@@ -12,15 +12,15 @@
 </head>
 <body class="inframe_body">
         <h3 class="common_title">我的关注</h3>
-        <ul class="card_list_con">
+        <ul class="card_list_con">  
             {%for userinfo in userinfos%}
             <li class="author_card card_list">
-                <a href="#" target="_blank" class="author_pic"><img src="images/cat.jpg" alt="author_pic"></a>
-                <a href="#" target="_blank" class="author_name">{{userinfo.nick_name}}</a>
+                <a href="/news/other?id={{userinfo.id}}" target="_blank" class="author_pic"><img src="{{userinfo.avatar_get}}" alt="author_pic"></a>
+                <a href="/news/other?id={{userinfo.id}}" target="_blank" class="author_name">{{userinfo.nick_name}}</a>
                 <div class="author_resume">{{userinfo.signature}}</div>
                 <div class="writings"><span>总篇数</span><b>{{userinfo.publish_news_count}}</b></div>
                 <div class="follows"><span>粉丝</span><b>{{userinfo.fans_count}}</b></div>
-                <a href="del_follow?id={{userinfo.id}}" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
+                <a href="/news/follow?id={{userinfo.id}}" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
             </li>
             {%endfor%}
         </ul>
@@ -28,12 +28,12 @@
         
         <div id="pagination" class="page"></div>
         <script>
-            $(function() {
+             $(function() {
                 $("#pagination").pagination({
-                    currentPage: 2,
-                    totalPage: 3,
+                    currentPage: {{ page }},
+                    totalPage: {{ total_page }},
                     callback: function(current) {
-                        alert('ok!');
+                        location.href='?page=' + current
                     }
                 });
             });

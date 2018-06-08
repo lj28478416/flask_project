@@ -2,10 +2,10 @@ import redis
 import os
 class Config():
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:mysql@192.168.102.135:3306/flask_project'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:mysql@192.168.102.136:3306/flask_project'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     # redis配置
-    REDIS_HOST = "192.168.102.135"
+    REDIS_HOST = "192.168.102.136"
     REDIS_PORT = 6379
     REDIS_DB = 10
     # session

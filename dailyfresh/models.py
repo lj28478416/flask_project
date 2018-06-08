@@ -1,17 +1,20 @@
 # 用户表: id,头像,昵称,签名,手机,密码,性别,是否为管理员
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask import current_app
+import pymysql
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+pymysql.install_as_MySQLdb()
 db = SQLAlchemy()
 
 
 # 基础表
 class Basemodel(object):
     id = db.Column(db.Integer, primary_key=True)
-    create_time = db.Column(db.DateTime, default=datetime.now())
-    publish_time = db.Column(db.DateTime, default=datetime.now())
+    create_time = db.Column(db.DateTime, default=datetime.now)
+    publish_time = db.Column(db.DateTime, default=datetime.now)
     isdelete = db.Column(db.Boolean, default=False)
 
 
@@ -35,7 +38,7 @@ class Userinfo(db.Model, Basemodel):
     signature = db.Column(db.String(200))
     nick_name = db.Column(db.String(20))
     gender = db.Column(db.Boolean, default=False)
-    avatar = db.Column(db.String(50), default='user_pic.png')
+    avatar = db.Column(db.String(50), default='FnOpFKZIe8kjEw-QuXamD28sYTXB')
     publish_news_count = db.Column(db.Integer, default=0)
     fans_count = db.Column(db.Integer, default=0)
     isAdmin = db.Column(db.Boolean, default=False)
@@ -58,6 +61,11 @@ class Userinfo(db.Model, Basemodel):
     #检查密码
     def check_pwd(self, pwd):
         return check_password_hash(self.password_hash, pwd)
+    #取出头像文件名并拼接
+    @property
+    def avatar_get(self):
+        return current_app.config.get('QINIU_URL') + self.avatar
+
 
 
 # 新闻分类表
@@ -91,14 +99,15 @@ class News(db.Model, Basemodel):
     # 分类
     news_classes = db.Column(db.Integer, db.ForeignKey('news_classes.id'))
     # 摘要
-    abstract = db.Column(db.String(50))
-    news_pic = db.Column(db.String(50))
+    abstract = db.Column(db.String(50),default='无摘要')
+    # 新闻图片
+    news_pic = db.Column(db.String(50),default='FnOpFKZIe8kjEw-QuXamD28sYTXB')
     # 内容
     msg = db.Column(db.Text)
     # 审核状态
-    check_statu = db.Column(db.Integer, db.ForeignKey('check_news.id'))
+    check_statu = db.Column(db.Integer, db.ForeignKey('check_news.id'),default=3)
     # 未通过原因
-    reason = db.Column(db.String(50))
+    reason = db.Column(db.String(50),default='无')
     # 发表用户
     user = db.Column(db.Integer, db.ForeignKey('user_info.id'))
     # 点击量
@@ -106,10 +115,13 @@ class News(db.Model, Basemodel):
     # 评论量
     comment_count = db.Column(db.Integer, default=0)
     # 收藏用户
-    collect_user = db.relationship('Userinfo', secondary=to_news_user, backref='collect', lazy='dynamic')
+    collect_user = db.relationship('Userinfo', secondary=to_news_user, backref=db.backref('collect', lazy='dynamic'), lazy='dynamic')
     # 新闻评论
     comment = db.relationship('NewsComment', backref='news_about', lazy='dynamic')
 
+    @property
+    def news_pic_get(self):
+        return current_app.config.get('QINIU_URL') + self.news_pic
 
 # 新闻评论表
 class NewsComment(db.Model, Basemodel):

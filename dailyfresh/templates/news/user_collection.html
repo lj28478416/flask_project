@@ -14,7 +14,7 @@
         <h3>我的收藏</h3>
         <ul class="article_list">
             {%for collection in collections%}
-            <li><a href="#">{{collection.name}}</a><span>{{collection.publish_time}}</span></li>
+            <li><a href="/news/detail?new_id={{collection.id}}" target=_parent >{{collection.name}}</a><span>{{collection.publish_time}}</span></li>
             {%endfor%}
         </ul>
 
@@ -24,10 +24,10 @@
         <script>
             $(function() {
                 $("#pagination").pagination({
-                    currentPage: 2,
-                    totalPage: 3,
+                    currentPage: {{ page }},
+                    totalPage: {{ total_page }},
                     callback: function(current) {
-                        alert('ok!');
+                        location.href='?page=' + current
                     }
                 });
             });

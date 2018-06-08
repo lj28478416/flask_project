@@ -1,3 +1,4 @@
+import redis
 from flask import *
 from config import Config
 import logging
@@ -20,5 +21,6 @@ def create_app():
     file_log_handler.setFormatter(formatter)
     # 为全局的日志工具对象添加日记录器
     logging.getLogger().addHandler(file_log_handler)
+    app.click_redis = redis.StrictRedis(host=app.config.get('REDIS_HOST'), port=app.config.get('REDIS_PORT'), db=app.config.get('REDIS_DB'))
     app.logger_xjzx = logging
     return app

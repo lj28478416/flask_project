@@ -13,7 +13,6 @@ $(function(){
     var $input = $('.input_txt3');
     var sHandler = 'edit';
     var sId = 0;
-
     $a.click(function(){
         sHandler = 'edit';
         sId = $(this).parent().siblings().eq(0).html();
@@ -47,6 +46,17 @@ $(function(){
                 $error.html('输入框不能为空').show();
                 return;
             }
+            $.post(
+                '',
+                {
+                    'csrf_token':$('#csrf_token').val(),
+                    'id':sId,
+                    'class':sVal
+                },
+                function(data){
+                   location.href=''
+                }
+            )
         }
         else
         {
@@ -56,7 +66,17 @@ $(function(){
                 $error.html('输入框不能为空').show();
                 return;
             }
+            $.post(
+                '',
+                {
+                    'csrf_token':$('#csrf_token').val(),
+                    'id':0,
+                    'class':sVal
+                },
+                function(data){
+                    location.href=''
+                }
+            )
         }
-
     })
 })
